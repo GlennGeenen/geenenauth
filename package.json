@@ -1,0 +1,30 @@
+{
+  "name": "geenenauth",
+  "version": "1.0.0",
+  "description": "Node.js Hapi Authentication plugin",
+  "main": "index.js",
+  "scripts": {
+    "start": "lab -L",
+    "test": "lab -L",
+    "coverage": "lab -c -L -r html -o ./coverage/index.html && opn ./coverage/index.html"
+  },
+  "author": "Glenn Geenen <glenn@geenentijd.be>",
+  "license": "MIT",
+  "dependencies": {
+    "hapi-auth-jwt2": "6.x.x",
+    "jsonwebtoken": "5.x.x"
+  },
+  "peerDependencies": {
+    "boom": "3.x.x",
+    "joi": "8.x.x"
+  },
+  "devDependencies": {
+    "assert": "1.x.x",
+    "eslint": "2.x.x",
+    "eslint-config-hapi": "9.x.x",
+    "eslint-plugin-hapi": "4.x.x",
+    "hapi": "13.x.x",
+    "lab": "10.x.x",
+    "opn-cli": "3.x.x"
+  }
+}
