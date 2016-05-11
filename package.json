@@ -9,6 +9,12 @@
     "coverage": "lab -c -L -r html -o ./coverage/index.html && opn ./coverage/index.html"
   },
   "author": "Glenn Geenen <glenn@geenentijd.be>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GlennGeenen/geenenauth"
+  },
+  "bugs": "https://github.com/GlennGeenen/geenenauth/issues",
+  "keywords": ["hapi", "plugin", "authentication", "jwt"],
   "license": "MIT",
   "dependencies": {
     "hapi-auth-jwt2": "6.x.x",
