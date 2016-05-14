@@ -1,6 +1,6 @@
 {
   "name": "geenenauth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node.js Hapi Authentication plugin",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,12 @@
     "url": "https://github.com/GlennGeenen/geenenauth"
   },
   "bugs": "https://github.com/GlennGeenen/geenenauth/issues",
-  "keywords": ["hapi", "plugin", "authentication", "jwt"],
+  "keywords": [
+    "hapi",
+    "plugin",
+    "authentication",
+    "jwt"
+  ],
   "license": "MIT",
   "dependencies": {
     "hapi-auth-jwt2": "6.x.x",
