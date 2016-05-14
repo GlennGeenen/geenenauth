@@ -9,10 +9,10 @@ const getSchema = function (roles, issuer, audience) {
     userid: Joi.string().guid().required(),
     username: Joi.string().min(3).required(),
     role: Joi.string().valid(roles).required(),
-    iat: Joi.date().timestamp('unix').max('now').required(),
-    exp: Joi.date().timestamp('unix').min('now').required(),
-    iss: Joi.any().valid(issuer).required(),
-    aud: Joi.any().valid(audience).required()
+    iat: Joi.any().required(),
+    exp: Joi.any().required(),
+    iss: Joi.string().valid(issuer).required(),
+    aud: Joi.string().valid(audience).required()
   });
 };
 
