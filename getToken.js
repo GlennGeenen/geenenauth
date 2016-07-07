@@ -23,12 +23,7 @@ const getToken = function (options) {
       role: user.role
     };
 
-    const onSigned = function (token) {
-
-      callback(null, token);
-    };
-
-    Jwt.sign(tokenData, options.secret, tokenOptions, onSigned);
+    Jwt.sign(tokenData, options.secret, tokenOptions, callback);
   };
 
 };
