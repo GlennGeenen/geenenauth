@@ -47,7 +47,7 @@ lab.experiment('Auth Plugin', () => {
       getServer().register({
         register: require('../index'),
         options: {
-          secret: secret
+          secret
         }
       }, callback);
     });
@@ -57,7 +57,7 @@ lab.experiment('Auth Plugin', () => {
       getServer().register({
         register: require('../index'),
         options: {
-          secret: secret,
+          secret,
           audience: 'test'
         }
       }, done);
@@ -68,7 +68,7 @@ lab.experiment('Auth Plugin', () => {
       getServer().register({
         register: require('../index'),
         options: {
-          secret: secret,
+          secret,
           issuer: 'test',
           audience: 'test',
           userRoles: ['test'],
