@@ -191,28 +191,6 @@ lab.experiment('AuthUtil', () => {
       validUser(token, null, reply);
     });
 
-    lab.test('jwt should have iat', (done) => {
-
-      const token = {
-        userid: 'c0cb1883-e8c6-4efa-8561-4ad4f4c14518',
-        username: 'glenn',
-        role: 'user',
-        exp: Math.round(Date.now() / 1000) + 60,
-        iss: options.issuer,
-        aud: options.audience
-      };
-
-      const reply = function (err, valid, decoded) {
-
-        Assert(err !== null);
-        Assert(valid === false);
-
-        done();
-      };
-
-      validUser(token, null, reply);
-    });
-
     lab.test('jwt should have expire date', (done) => {
 
       const token = {

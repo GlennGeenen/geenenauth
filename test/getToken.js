@@ -106,7 +106,6 @@ lab.experiment('getToken', () => {
       username: 'test',
       role: 'test'
     }, {
-      issuer: 'trol',
       noTimestamp: true
     }, (err, token) => {
 
@@ -115,7 +114,6 @@ lab.experiment('getToken', () => {
       Jwt.verify(token, 'BestSecretEver', (err, decoded) => {
 
         Assert(err === null);
-        Assert(decoded.iss === 'trol');
         Assert(decoded.iat === undefined);
         done();
       });

@@ -218,6 +218,38 @@ lab.experiment('Auth Plugin', () => {
       });
     });
 
+    lab.test('should return success without iat', (done) => {
+
+      server.methods.getToken({
+        userid: 'c0cb1883-e8c6-4efa-8561-4ad4f4c14518',
+        username: 'glenn',
+        role: 'admin'
+      }, {
+        noTimestamp: true
+      }, (err, token) => {
+
+        if (err) {
+          return done(err);
+        }
+
+        const options = {
+          method: 'GET',
+          url: '/jwtAdmin',
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        };
+
+        server.inject(options, (response) => {
+
+          Assert(response.statusCode === 200);
+          Assert(response.result.message === 'success');
+          done();
+        });
+
+      });
+    });
+
     lab.test('should return success for admin', (done) => {
 
       server.methods.getToken({

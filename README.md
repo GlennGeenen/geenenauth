@@ -75,6 +75,10 @@ function (request, reply) {
 
 Options: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 
+- expiresIn
+- notBefore
+- noTimestamp
+
 ```
 function (request, reply) {
 

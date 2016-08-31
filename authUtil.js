@@ -7,9 +7,9 @@ const getSchema = function (roles, issuer, audience) {
 
   return Joi.object({
     userid: Joi.string().guid().required(),
-    username: Joi.string().min(3).required(),
+    username: Joi.string().required(),
     role: Joi.string().valid(roles).required(),
-    iat: Joi.any().required(),
+    iat: Joi.any(),
     exp: Joi.any().required(),
     iss: Joi.string().valid(issuer).required(),
     aud: Joi.string().valid(audience).required()
