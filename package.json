@@ -26,16 +26,16 @@
     "jsonwebtoken": "7.x.x"
   },
   "peerDependencies": {
-    "boom": "3.x.x",
-    "joi": "8.x.x"
+    "boom": "4.x.x",
+    "joi": "9.x.x"
   },
   "devDependencies": {
     "assert": "1.x.x",
     "eslint": "3.x.x",
-    "eslint-config-hapi": "9.x.x",
+    "eslint-config-hapi": "10.x.x",
     "eslint-plugin-hapi": "4.x.x",
-    "hapi": "13.x.x",
-    "lab": "10.x.x",
+    "hapi": "15.x.x",
+    "lab": "11.x.x",
     "opn-cli": "3.x.x"
   }
 }
