@@ -2,19 +2,31 @@
 
 const Jwt = require('jsonwebtoken');
 
-const getToken = function (options) {
+const getToken = function (pluginOptions) {
 
   const tokenOptions = {
     algorithm: 'HS512',
     expiresIn: '6h',
-    issuer: options.issuer,
-    audience: options.audience
+    issuer: pluginOptions.issuer,
+    audience: pluginOptions.audience
   };
 
-  return function (user, callback) {
+  return function (user, options, callback) {
 
-    if (!user || !user.userid || !user.username || !user.role) {
-      return callback(new Error('No valid user provided.'));
+    let opts;
+    let cb;
+    if (options instanceof Function) {
+      cb = options;
+      opts = tokenOptions;
+    }
+    else {
+      cb = callback;
+      opts = Object.assign({}, tokenOptions, options);
+    }
+
+    if (!user || !user.userid || !user.username || !user.role ||
+        pluginOptions.userRoles.indexOf(user.role) === -1) {
+      return cb(new Error('No valid user provided.'));
     }
 
     const tokenData = {
@@ -23,7 +35,7 @@ const getToken = function (options) {
       role: user.role
     };
 
-    Jwt.sign(tokenData, options.secret, tokenOptions, callback);
+    Jwt.sign(tokenData, pluginOptions.secret, opts, cb);
   };
 
 };
