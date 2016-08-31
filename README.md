@@ -55,7 +55,7 @@ server.route({
 });
 ```
 
-## isAdmin
+## isAdmin(user)
 
 The plugin exposes an isAdmin method.
 
@@ -71,7 +71,9 @@ function (request, reply) {
 }
 ```
 
-## getToken
+## getToken(user, [options,] callback)
+
+Options: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 
 ```
 function (request, reply) {
@@ -82,11 +84,11 @@ function (request, reply) {
     role: 'user'
   };
 
-  request.server.methods.getToken(user, (err, token) => {
+  request.server.methods.getToken(user, {
+    noTimestamp: true
+  } (err, token) => {
 
     // We have token here
-
   });
-
 }
 ```
