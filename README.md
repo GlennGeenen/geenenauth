@@ -1,5 +1,7 @@
 # GeenenAuth Hapi Plugin
 
+[![Build Status](https://travis-ci.org/GlennGeenen/geenenauth.svg?branch=master)](https://travis-ci.org/GlennGeenen/geenenauth)
+
 This is a Hapi plugin wrapper around hapi-auth-jwt2 with a specific setup as used by GeenenTijd. Compatible with Glue.
 
 ## Install
