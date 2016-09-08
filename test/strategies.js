@@ -5,6 +5,9 @@ const Hapi = require('hapi');
 const Lab = require('lab');
 const lab = exports.lab = Lab.script();
 
+// We are going to do some timebending
+const Lolex = require('lolex');
+
 lab.experiment('Auth Plugin', () => {
 
   let server;
@@ -218,19 +221,22 @@ lab.experiment('Auth Plugin', () => {
       });
     });
 
-    lab.test('should return success without iat', (done) => {
+    lab.test('should be expired', (done) => {
 
       server.methods.getToken({
         userid: 'c0cb1883-e8c6-4efa-8561-4ad4f4c14518',
         username: 'glenn',
         role: 'admin'
-      }, {
-        noTimestamp: true
       }, (err, token) => {
 
         if (err) {
           return done(err);
         }
+
+        // We forward time to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const clock = Lolex.install(undefined, tomorrow);
 
         const options = {
           method: 'GET',
@@ -242,11 +248,49 @@ lab.experiment('Auth Plugin', () => {
 
         server.inject(options, (response) => {
 
+          // We reset time
+          clock.uninstall();
+          Assert(response.statusCode === 401);
+          done();
+        });
+      });
+    });
+
+    lab.test('should not expire token', (done) => {
+
+      server.methods.getToken({
+        userid: 'c0cb1883-e8c6-4efa-8561-4ad4f4c14518',
+        username: 'glenn',
+        role: 'admin'
+      }, {
+        expiresIn: undefined
+      }, (err, token) => {
+
+        if (err) {
+          return done(err);
+        }
+
+        // We forward time to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const clock = Lolex.install(undefined, tomorrow);
+
+        const options = {
+          method: 'GET',
+          url: '/jwtAdmin',
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        };
+
+        server.inject(options, (response) => {
+
+          // We reset time
+          clock.uninstall();
           Assert(response.statusCode === 200);
           Assert(response.result.message === 'success');
           done();
         });
-
       });
     });
 

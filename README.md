@@ -79,6 +79,8 @@ Options: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 - notBefore
 - noTimestamp
 
+Example of settings a token that never expires (not recommended):
+
 ```
 function (request, reply) {
 
@@ -89,7 +91,7 @@ function (request, reply) {
   };
 
   request.server.methods.getToken(user, {
-    noTimestamp: true
+    expiresIn: undefined
   } (err, token) => {
 
     // We have token here

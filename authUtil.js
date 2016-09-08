@@ -10,7 +10,7 @@ const getSchema = function (roles, issuer, audience) {
     username: Joi.string().required(),
     role: Joi.string().valid(roles).required(),
     iat: Joi.any(),
-    exp: Joi.any().required(),
+    exp: Joi.any(),
     iss: Joi.string().valid(issuer).required(),
     aud: Joi.string().valid(audience).required()
   });
