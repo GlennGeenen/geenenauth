@@ -21,6 +21,9 @@
     "jwt"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "dependencies": {
     "hapi-auth-jwt2": "7.x.x",
     "jsonwebtoken": "7.x.x"
