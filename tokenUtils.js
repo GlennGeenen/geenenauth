@@ -51,8 +51,8 @@ module.exports = function (pluginOptions) {
       opts = Object.assign({}, tokenOptions, options);
     }
 
-    Jwt.verify(token, secret, opts, cb)
+    Jwt.verify(token, secret, opts, cb);
   };
 
-  return {getTokenEx, verifyTokenEx};
+  return { getTokenEx, verifyTokenEx };
 };
