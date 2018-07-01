@@ -34,6 +34,11 @@ exports.register = function (server, options, next) {
   // Register getToken method
   server.method('getToken', require('./getToken')(options));
 
+  // Register getToken method
+  const tokenUtils = require('./tokenUtils')(options);
+  server.method('getTokenEx', tokenUtils.getTokenEx);
+  server.method('verifyTokenEx', tokenUtils.verifyTokenEx);
+
   const onRegister = function (err) {
 
     const tokenOptions = {
