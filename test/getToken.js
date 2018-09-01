@@ -10,8 +10,7 @@ lab.experiment('getToken', () => {
   const getToken = require('../getToken')({
     secret: 'BestSecretEver',
     issuer: 'test',
-    audience: 'test',
-    userRoles: ['test']
+    audience: 'test'
   });
 
   lab.test('should get Token', (done) => {
@@ -80,19 +79,6 @@ lab.experiment('getToken', () => {
       userid: 'lala',
       username: 'test'
     }, (err) => {
-
-      Assert(err);
-      done();
-    });
-  });
-
-  lab.test('should have valid role', (done) => {
-
-    getToken({
-      userid: 'lala',
-      username: 'test',
-      role: 'role'
-    }, (err, token) => {
 
       Assert(err);
       done();

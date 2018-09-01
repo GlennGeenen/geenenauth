@@ -70,9 +70,38 @@ lab.experiment('Auth Plugin', () => {
         options: {
           secret,
           issuer: 'test',
+          audience: 'test'
+        }
+      }, done);
+    });
+
+    lab.test('should register', (done) => {
+
+      getServer().register({
+        register: require('../index'),
+        options: {
+          secret,
+          issuer: 'test',
           audience: 'test',
-          userRoles: ['test'],
-          adminRoles: ['admin']
+          strategies: []
+        }
+      }, done);
+    });
+
+    lab.test('should register', (done) => {
+
+      getServer().register({
+        register: require('../index'),
+        options: {
+          secret,
+          issuer: 'test',
+          audience: 'test',
+          strategies: [{
+            name: 'one'
+          }, {
+            name: 'two',
+            roles: ['two']
+          }]
         }
       }, done);
     });
