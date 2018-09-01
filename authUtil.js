@@ -21,7 +21,7 @@ const validate = function (decodedToken, schema, callback) {
   const validated = function (err) {
 
     if (err) {
-      const error = Boom.wrap(err, 403);
+      const error = Boom.boomify(err, { statusCode: 403 });
       return callback(error, false, decodedToken);
     }
 
