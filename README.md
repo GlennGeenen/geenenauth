@@ -19,8 +19,16 @@ server.register({
     secret: 'MyJWTSecret',
     issuer: 'MyIssuer', // Default GeenenTijd
     audience: 'MyAudience',
-    userRoles: [], // Default ['user', 'editor']
-    adminRoles: [], // Default ['admin', 'superadmin']
+    strategies: [{
+      name: 'isUser',
+      roles: ['user', 'editor', 'admin', 'superadmin'],
+    }, {
+      name: 'isEditor',
+      roles: ['editor'],
+    }, {
+      name: 'isAdmin',
+      roles: ['admin', 'superadmin'],
+    }]
   }
 });
 ```
@@ -33,45 +41,14 @@ server.route({
   path: '/me',
   config: {
     auth: {
-      strategy: 'jwtUser'
+      strategy: 'strategyName'
     }
   },
   handler: function (request, reply) {
   }
 });
-```
-Admin Authentication:
-```
-server.route({
-  method: 'GET',
-  path: '/me',
-  config: {
-    auth: {
-      strategy: 'jwtAdmin'
-    }
-  },
-  handler: function (request, reply) {
-  }
-});
-```
 
-## isAdmin(user)
-
-The plugin exposes an isAdmin method.
-
-```
-function (request, reply) {
-
-  if (request.server.methods.isAdmin(request.auth.credentials)) {
-
-    // User is admin
-
-  }
-
-}
-```
-
-## getToken(user, [options,] callback)
+## getToken(user, [secret, options,] callback)
 
 Options: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 
@@ -79,8 +56,7 @@ Options: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
 - notBefore
 - noTimestamp
 
-Example of settings a token that never expires (not recommended):
-
+Usage:
 ```
 function (request, reply) {
 
@@ -91,10 +67,18 @@ function (request, reply) {
   };
 
   request.server.methods.getToken(user, {
-    expiresIn: undefined
+    expiresIn: '1d'
   } (err, token) => {
 
     // We have token here
   });
 }
 ```
+
+## verifyToken(user, [secret, options,] callback)
+
+Options: [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
+
+- expiresIn
+- notBefore
+- noTimestamp

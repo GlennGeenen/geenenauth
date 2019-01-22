@@ -2,7 +2,7 @@
 
 const Jwt = require('jsonwebtoken');
 
-const getToken = function (pluginOptions) {
+const verifyToken = (pluginOptions) => {
 
   const tokenOptions = {
     algorithm: 'HS512',
@@ -11,7 +11,7 @@ const getToken = function (pluginOptions) {
     audience: pluginOptions.audience
   };
 
-  return function signToken(user, secretOrPrivateKey, options, callback) {
+  return function checkToken(token, secretOrPrivateKey, options, callback) {
 
     let opts;
     let cb;
@@ -35,23 +35,13 @@ const getToken = function (pluginOptions) {
       cb = callback;
     }
 
-    if (!user || !user.userid || !user.username || !user.role) {
-      return cb(new Error('No valid user provided.'));
+    if (!token) {
+      return cb(new Error('No token provided.'));
     }
 
-    const tokenData = {
-      userid: user.userid,
-      username: user.username,
-      role: user.role
-    };
-
-    if (opts.expiresIn === null) {
-      delete opts.expiresIn;
-    }
-
-    Jwt.sign(tokenData, secret, opts, cb);
+    Jwt.verify(token, secret, opts, cb);
   };
 
 };
 
-module.exports = getToken;
+module.exports = verifyToken;

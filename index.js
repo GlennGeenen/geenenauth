@@ -1,7 +1,9 @@
 'use strict';
 
 const JwtAuth = require('hapi-auth-jwt2');
-const AuthUtil = require('./authUtil');
+const Validator = require('./validator');
+const GetToken = require('./getToken');
+const VerifyToken = require('./verifyToken');
 
 exports.register = function (server, options, next) {
 
@@ -17,39 +19,15 @@ exports.register = function (server, options, next) {
     options.issuer = 'GeenenTijd';
   }
 
-  if (!options.userRoles) {
-    options.userRoles = ['user', 'editor'];
-  }
-
-  if (!options.powerUserRoles) {
-    options.powerUserRoles = ['poweruser'];
-  }
-
-  if (!options.adminRoles) {
-    options.adminRoles = ['admin', 'superadmin'];
-  }
-
-  // Admin roles are also power user roles
-  options.powerUserRoles = options.powerUserRoles.concat(options.adminRoles);
-
-  // Power user roles are also user roles
-  options.userRoles = options.userRoles.concat(options.powerUserRoles);
-
-  // Register isAdmin method
-  server.method('isAdmin', require('./roleChecks').isAdmin(options));
-
-  // Register isPowerUser method
-  server.method('isPowerUser', require('./roleChecks').isPowerUser(options));
-
   // Register getToken method
-  server.method('getToken', require('./getToken')(options));
-
-  // Register getToken method
-  const tokenUtils = require('./tokenUtils')(options);
-  server.method('getTokenEx', tokenUtils.getTokenEx);
-  server.method('verifyTokenEx', tokenUtils.verifyTokenEx);
+  server.method('getToken', GetToken(options));
+  server.method('verifyToken', VerifyToken(options));
 
   const onRegister = function (err) {
+
+    if (err || !Array.isArray(options.strategies)) {
+      return next(err);
+    }
 
     const tokenOptions = {
       algorithms: 'HS512',
@@ -57,22 +35,14 @@ exports.register = function (server, options, next) {
       audience: options.audience
     };
 
-    server.auth.strategy('jwtUser', 'jwt', {
-      key: options.secret,
-      validateFunc: AuthUtil.validUser(options),
-      verifyOptions: tokenOptions
-    });
+    options.strategies.forEach((strat) => {
 
-    server.auth.strategy('jwtPowerUser', 'jwt', {
-      key: options.secret,
-      validateFunc: AuthUtil.validPowerUser(options),
-      verifyOptions: tokenOptions
-    });
-
-    server.auth.strategy('jwtAdmin', 'jwt', {
-      key: options.secret,
-      validateFunc: AuthUtil.validAdmin(options),
-      verifyOptions: tokenOptions
+      const strategyOptions = Object.assign({}, options, strat);
+      server.auth.strategy(strat.name, 'jwt', {
+        key: options.secret,
+        validateFunc: Validator(strategyOptions),
+        verifyOptions: tokenOptions
+      });
     });
 
     return next(err);
