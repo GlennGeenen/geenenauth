@@ -40,6 +40,15 @@ const validUser = function (options) {
   };
 };
 
+const validPowerUser = function (options) {
+
+  return function (decodedToken, request, callback) {
+
+    const schema = getSchema(options.powerUserRoles, options.issuer, options.audience);
+    validate(decodedToken, schema, callback);
+  };
+};
+
 const validAdmin = function (options) {
 
   return function (decodedToken, request, callback) {
@@ -52,5 +61,6 @@ const validAdmin = function (options) {
 module.exports = {
   validate,
   validUser,
+  validPowerUser,
   validAdmin
 };

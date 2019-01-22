@@ -21,15 +21,25 @@ exports.register = function (server, options, next) {
     options.userRoles = ['user', 'editor'];
   }
 
+  if (!options.powerUserRoles) {
+    options.powerUserRoles = ['poweruser'];
+  }
+
   if (!options.adminRoles) {
     options.adminRoles = ['admin', 'superadmin'];
   }
 
-  // Admin roles are also user roles
-  options.userRoles = options.userRoles.concat(options.adminRoles);
+  // Admin roles are also power user roles
+  options.powerUserRoles = options.powerUserRoles.concat(options.adminRoles);
+
+  // Power user roles are also user roles
+  options.userRoles = options.userRoles.concat(options.powerUserRoles);
 
   // Register isAdmin method
-  server.method('isAdmin', require('./isAdmin')(options));
+  server.method('isAdmin', require('./roleChecks').isAdmin(options));
+
+  // Register isPowerUser method
+  server.method('isPowerUser', require('./roleChecks').isPowerUser(options));
 
   // Register getToken method
   server.method('getToken', require('./getToken')(options));
@@ -50,6 +60,12 @@ exports.register = function (server, options, next) {
     server.auth.strategy('jwtUser', 'jwt', {
       key: options.secret,
       validateFunc: AuthUtil.validUser(options),
+      verifyOptions: tokenOptions
+    });
+
+    server.auth.strategy('jwtPowerUser', 'jwt', {
+      key: options.secret,
+      validateFunc: AuthUtil.validPowerUser(options),
       verifyOptions: tokenOptions
     });
 
