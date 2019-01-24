@@ -12,7 +12,8 @@ lab.experiment('Validator', () => {
     issuer: 'GeenenIssuer',
     audience: 'GeenenAudience',
     roles: ['user', 'admin'],
-    adminRoles: ['admin']
+    adminRoles: ['admin'],
+    mustExpire: true
   };
 
   lab.test('jwt should have issuer', (done) => {
