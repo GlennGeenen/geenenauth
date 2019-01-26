@@ -47,6 +47,7 @@ server.route({
   handler: function (request, reply) {
   }
 });
+```
 
 ## getToken(user, [secret, options,] callback)
 
