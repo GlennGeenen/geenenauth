@@ -14,7 +14,14 @@ lab.experiment('Auth Plugin', () => {
   const tokenOptions = {
     secret: 'BestSecretEver',
     issuer: 'test',
-    audience: 'test'
+    audience: 'test',
+    strategies: [{
+      name: 'jwtUser',
+      roles: ['user']
+    }, {
+      name: 'adminAuth',
+      roles: ['admin']
+    }]
   };
 
   lab.before((done) => {
@@ -41,7 +48,7 @@ lab.experiment('Auth Plugin', () => {
             strategy: 'jwtUser'
           }
         },
-        handler: function (request, reply) {
+        handler: (request, reply) => {
 
           reply({ message: 'success' });
         }
@@ -110,7 +117,7 @@ lab.experiment('Auth Plugin', () => {
       });
     });
 
-    lab.test('should return success for admin', (done) => {
+    lab.test('should fail for admin', (done) => {
 
       server.methods.getToken({
         userid: 'c0cb1883-e8c6-4efa-8561-4ad4f4c14518',
@@ -132,8 +139,7 @@ lab.experiment('Auth Plugin', () => {
 
         server.inject(options, (response) => {
 
-          Assert(response.statusCode === 200);
-          Assert(response.result.message === 'success');
+          Assert(response.statusCode === 403);
           done();
         });
 
@@ -141,16 +147,16 @@ lab.experiment('Auth Plugin', () => {
     });
   });
 
-  lab.experiment('test jwtAdmin', () => {
+  lab.experiment('test adminAuth', () => {
 
     lab.before((done) => {
 
       server.route({
         method: 'GET',
-        path: '/jwtAdmin',
+        path: '/adminAuth',
         config: {
           auth: {
-            strategy: 'jwtAdmin'
+            strategy: 'adminAuth'
           }
         },
         handler: function (request, reply) {
@@ -165,7 +171,7 @@ lab.experiment('Auth Plugin', () => {
 
       const options = {
         method: 'GET',
-        url: '/jwtAdmin'
+        url: '/adminAuth'
       };
 
       server.inject(options, (response) => {
@@ -179,7 +185,7 @@ lab.experiment('Auth Plugin', () => {
 
       const options = {
         method: 'GET',
-        url: '/jwtAdmin',
+        url: '/adminAuth',
         headers: {
           authorization: 'Bearer sdsfg5dsfg156ad5g1sg5f1g5sd1gre56asg1'
         }
@@ -206,7 +212,7 @@ lab.experiment('Auth Plugin', () => {
 
         const options = {
           method: 'GET',
-          url: '/jwtAdmin',
+          url: '/adminAuth',
           headers: {
             authorization: `Bearer ${token}`
           }
@@ -240,7 +246,7 @@ lab.experiment('Auth Plugin', () => {
 
         const options = {
           method: 'GET',
-          url: '/jwtAdmin',
+          url: '/adminAuth',
           headers: {
             authorization: `Bearer ${token}`
           }
@@ -263,7 +269,7 @@ lab.experiment('Auth Plugin', () => {
         username: 'glenn',
         role: 'admin'
       }, {
-        expiresIn: undefined
+        expiresIn: '1y'
       }, (err, token) => {
 
         if (err) {
@@ -277,7 +283,7 @@ lab.experiment('Auth Plugin', () => {
 
         const options = {
           method: 'GET',
-          url: '/jwtAdmin',
+          url: '/adminAuth',
           headers: {
             authorization: `Bearer ${token}`
           }
@@ -287,7 +293,7 @@ lab.experiment('Auth Plugin', () => {
 
           // We reset time
           clock.uninstall();
-          Assert(response.statusCode === 200);
+          Assert(response.statusCode === 200, `${response.statusCode} should equal 200`);
           Assert(response.result.message === 'success');
           done();
         });
@@ -308,7 +314,7 @@ lab.experiment('Auth Plugin', () => {
 
         const options = {
           method: 'GET',
-          url: '/jwtAdmin',
+          url: '/adminAuth',
           headers: {
             authorization: `Bearer ${token}`
           }
