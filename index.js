@@ -19,6 +19,10 @@ exports.register = function (server, options, next) {
     options.issuer = 'GeenenTijd';
   }
 
+  if (!options.mustExpire) {
+    options.mustExpire = true;
+  }
+
   // Register getToken method
   server.method('getToken', GetToken(options));
   server.method('verifyToken', VerifyToken(options));

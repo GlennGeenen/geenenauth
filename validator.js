@@ -5,7 +5,7 @@ const Boom = require('boom');
 const validate = (decodedToken, options, callback) => {
 
   if (!decodedToken.iat ||
-    !decodedToken.exp ||
+    (options.mustExpire && !decodedToken.exp) ||
     !decodedToken.userid ||
     !decodedToken.username ||
     decodedToken.iss !== options.issuer ||
