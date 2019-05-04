@@ -2,7 +2,7 @@
 
 const Jwt = require('jsonwebtoken');
 
-const getToken = function (pluginOptions) {
+const getToken = (pluginOptions) => {
 
   const tokenOptions = {
     algorithm: 'HS512',
@@ -11,32 +11,25 @@ const getToken = function (pluginOptions) {
     audience: pluginOptions.audience
   };
 
-  return function signToken(user, secretOrPrivateKey, options, callback) {
+  return (user, secretOrPrivateKey, options) => {
 
-    let opts;
-    let cb;
+    let opts = tokenOptions;
     let secret = pluginOptions.secret;
-    if (secretOrPrivateKey instanceof Function) {
-      cb = secretOrPrivateKey;
-      opts = tokenOptions;
+    if (!user || !user.userid || !user.username || !user.role) {
+      throw new Error('No valid user provided.');
     }
-    else if (options instanceof Function) {
+
+    if (options) {
+      secret = secretOrPrivateKey;
+      opts = Object.assign({}, tokenOptions, options);
+    }
+    else if (secretOrPrivateKey) {
       if (secretOrPrivateKey instanceof Object) {
         opts = Object.assign({}, tokenOptions, secretOrPrivateKey);
       }
       else {
         secret = secretOrPrivateKey;
       }
-      cb = options;
-    }
-    else {
-      secret = secretOrPrivateKey;
-      opts = Object.assign({}, tokenOptions, options);
-      cb = callback;
-    }
-
-    if (!user || !user.userid || !user.username || !user.role) {
-      return cb(new Error('No valid user provided.'));
     }
 
     const tokenData = {
@@ -49,9 +42,8 @@ const getToken = function (pluginOptions) {
       delete opts.expiresIn;
     }
 
-    Jwt.sign(tokenData, secret, opts, cb);
+    return Jwt.sign(tokenData, secret, opts);
   };
-
 };
 
 module.exports = getToken;

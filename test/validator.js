@@ -2,11 +2,13 @@
 
 const Assert = require('assert');
 const Lab = require('lab');
+
 const lab = exports.lab = Lab.script();
 
 lab.experiment('Validator', () => {
 
   const Validator = require('../validator');
+
   const options = {
     secret: 'IAmTheSecret',
     issuer: 'GeenenIssuer',

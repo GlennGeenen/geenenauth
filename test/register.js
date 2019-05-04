@@ -3,6 +3,7 @@
 const Assert = require('assert');
 const Hapi = require('hapi');
 const Lab = require('lab');
+
 const lab = exports.lab = Lab.script();
 
 lab.experiment('Auth Plugin', () => {
@@ -11,8 +12,7 @@ lab.experiment('Auth Plugin', () => {
 
   const getServer = function getServer() {
 
-    const server = new Hapi.Server();
-    server.connection({
+    const server = new Hapi.Server({
       port: 8080
     });
     return server;
@@ -20,64 +20,68 @@ lab.experiment('Auth Plugin', () => {
 
   lab.experiment('register plugin', () => {
 
-    lab.test('should require secret', (done) => {
+    lab.test('should require secret', async () => {
 
-      const callback = function (err) {
+      let error = null;
+      try {
+        await getServer().register({
+          register: require('../index'),
+          options: {
+            audience: 'test'
+          }
+        });
+      } catch (err) {
+        error = err;
+      }
 
-        Assert(err);
-        done();
-      };
-
-      getServer().register({
-        register: require('../index'),
-        options: {
-          audience: 'test'
-        }
-      }, callback);
+      Assert(error);
+      Assert(error.message === 'No private key provided.');
     });
 
-    lab.test('should require audience', (done) => {
+    lab.test('should require audience', async () => {
 
-      const callback = function (err) {
+      let error = null;
+      try {
+        await getServer().register({
+          register: require('../index'),
+          options: {
+            secret
+          }
+        });
+      } catch (err) {
+        error = err;
+      }
 
-        Assert(err);
-        done();
-      };
-
-      getServer().register({
-        register: require('../index'),
-        options: {
-          secret
-        }
-      }, callback);
+      Assert(error);
+      Assert(error.message === 'No audience provided.');
     });
 
-    lab.test('should register', (done) => {
+    lab.test('should register', async () => {
 
-      getServer().register({
+      await getServer().register({
         register: require('../index'),
         options: {
           secret,
           audience: 'test'
         }
-      }, done);
+      });
     });
 
-    lab.test('should register', (done) => {
+    lab.test('should register', async () => {
 
-      getServer().register({
+      await getServer().register({
         register: require('../index'),
         options: {
           secret,
           issuer: 'test',
           audience: 'test'
         }
-      }, done);
+      });
     });
 
-    lab.test('should register', (done) => {
+    lab.test('should register', async () => {
 
-      getServer().register({
+      await getServer().register({
         register: require('../index'),
         options: {
           secret,
@@ -85,12 +89,12 @@ lab.experiment('Auth Plugin', () => {
           audience: 'test',
           strategies: []
         }
-      }, done);
+      });
     });
 
-    lab.test('should register', (done) => {
+    lab.test('should register', async () => {
 
-      getServer().register({
+      await getServer().register({
         register: require('../index'),
         options: {
           secret,
@@ -103,7 +107,7 @@ lab.experiment('Auth Plugin', () => {
             roles: ['two']
           }]
         }
-      }, done);
+      });
     });
   });
 });

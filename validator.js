@@ -1,8 +1,6 @@
 'use strict';
 
-const Boom = require('boom');
-
-const validate = (decodedToken, options, callback) => {
+const validate = (decodedToken, options) => {
 
   if (!decodedToken.iat ||
     (options.mustExpire && !decodedToken.exp) ||
@@ -10,20 +8,22 @@ const validate = (decodedToken, options, callback) => {
     !decodedToken.username ||
     decodedToken.iss !== options.issuer ||
     decodedToken.aud !== options.audience) {
-    return callback(Boom.forbidden(), false, decodedToken);
+    return { isValid: false, decodedToken };
   }
+
   if (options.roles && options.roles.length &&
     !options.roles.includes(decodedToken.role)) {
-    return callback(Boom.forbidden(), false, decodedToken);
+    return { isValid: false, decodedToken };
   }
-  return callback(null, true, decodedToken);
+
+  return { isValid: true, decodedToken };
 };
 
 const getValidationFunction = (options) => {
 
-  return (decodedToken, request, callback) => {
+  return (decodedToken, request) => {
 
-    validate(decodedToken, options, callback);
+    validate(decodedToken, options);
   };
 };
 
