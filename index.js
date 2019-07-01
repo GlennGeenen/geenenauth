@@ -1,86 +1,58 @@
 'use strict';
 
 const JwtAuth = require('hapi-auth-jwt2');
-const AuthUtil = require('./authUtil');
 
-exports.register = function (server, options, next) {
+const Validator = require('./validator');
+const GetToken = require('./getToken');
+const VerifyToken = require('./verifyToken');
+
+const register = async (server, options) => {
 
   if (!options.secret) {
-    return next(new Error('No private key provided.'));
+    throw new Error('No private key provided.');
   }
 
   if (!options.audience) {
-    return next(new Error('No audience provided.'));
+    throw new Error('No audience provided.');
   }
 
   if (!options.issuer) {
     options.issuer = 'GeenenTijd';
   }
 
-  if (!options.userRoles) {
-    options.userRoles = ['user', 'editor'];
+  if (!options.mustExpire) {
+    options.mustExpire = true;
   }
-
-  if (!options.powerUserRoles) {
-    options.powerUserRoles = ['poweruser'];
-  }
-
-  if (!options.adminRoles) {
-    options.adminRoles = ['admin', 'superadmin'];
-  }
-
-  // Admin roles are also power user roles
-  options.powerUserRoles = options.powerUserRoles.concat(options.adminRoles);
-
-  // Power user roles are also user roles
-  options.userRoles = options.userRoles.concat(options.powerUserRoles);
-
-  // Register isAdmin method
-  server.method('isAdmin', require('./roleChecks').isAdmin(options));
-
-  // Register isPowerUser method
-  server.method('isPowerUser', require('./roleChecks').isPowerUser(options));
 
   // Register getToken method
-  server.method('getToken', require('./getToken')(options));
+  server.method('getToken', GetToken(options));
+  server.method('verifyToken', VerifyToken(options));
 
-  // Register getToken method
-  const tokenUtils = require('./tokenUtils')(options);
-  server.method('getTokenEx', tokenUtils.getTokenEx);
-  server.method('verifyTokenEx', tokenUtils.verifyTokenEx);
+  await server.register(JwtAuth);
 
-  const onRegister = function (err) {
-
-    const tokenOptions = {
-      algorithms: 'HS512',
-      issuer: options.issuer,
-      audience: options.audience
-    };
-
-    server.auth.strategy('jwtUser', 'jwt', {
-      key: options.secret,
-      validateFunc: AuthUtil.validUser(options),
-      verifyOptions: tokenOptions
-    });
-
-    server.auth.strategy('jwtPowerUser', 'jwt', {
-      key: options.secret,
-      validateFunc: AuthUtil.validPowerUser(options),
-      verifyOptions: tokenOptions
-    });
-
-    server.auth.strategy('jwtAdmin', 'jwt', {
-      key: options.secret,
-      validateFunc: AuthUtil.validAdmin(options),
-      verifyOptions: tokenOptions
-    });
-
-    return next(err);
+  const tokenOptions = {
+    algorithms: 'HS512',
+    issuer: options.issuer,
+    audience: options.audience
   };
 
-  return server.register(JwtAuth, onRegister);
+  options.strategies.forEach((strat) => {
+
+    const strategyOptions = Object.assign({}, options, strat);
+    server.auth.strategy(strat.name, 'jwt', {
+      key: options.secret,
+      validate: Validator(strategyOptions),
+      verifyOptions: tokenOptions
+    });
+  });
+
+  return null;
 };
 
-exports.register.attributes = {
-  pkg: require('./package.json')
+exports.plugin = {
+  pkg: require('./package.json'),
+  requirements: {
+    hapi: '>=17'
+  },
+  register
 };

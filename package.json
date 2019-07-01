@@ -1,6 +1,6 @@
 {
   "name": "geenenauth",
-  "version": "1.1.3",
+  "version": "3.0.0",
   "description": "Node.js Hapi Authentication plugin",
   "main": "index.js",
   "scripts": {
@@ -22,24 +22,20 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "dependencies": {
-    "hapi-auth-jwt2": "7.x.x",
-    "jsonwebtoken": "7.x.x"
-  },
-  "peerDependencies": {
-    "boom": ">=4",
-    "joi": ">=9"
+    "hapi-auth-jwt2": "8.x.x",
+    "jsonwebtoken": "8.x.x"
   },
   "devDependencies": {
     "assert": "1.x.x",
-    "eslint": "4.x.x",
-    "eslint-config-hapi": "10.x.x",
+    "eslint": "5.x.x",
+    "eslint-config-hapi": "12.x.x",
     "eslint-plugin-hapi": "4.x.x",
-    "hapi": "16.x.x",
-    "lab": "14.x.x",
-    "lolex": "1.x.x",
-    "opn-cli": "3.x.x"
+    "hapi": "18.x.x",
+    "lab": "18.x.x",
+    "lolex": "4.x.x",
+    "opn-cli": "4.x.x"
   }
 }

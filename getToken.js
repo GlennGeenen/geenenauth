@@ -2,7 +2,7 @@
 
 const Jwt = require('jsonwebtoken');
 
-const getToken = function (pluginOptions) {
+const getToken = (pluginOptions) => {
 
   const tokenOptions = {
     algorithm: 'HS512',
@@ -11,22 +11,25 @@ const getToken = function (pluginOptions) {
     audience: pluginOptions.audience
   };
 
-  return function (user, options, callback) {
+  return (user, secretOrPrivateKey, options) => {
 
-    let opts;
-    let cb;
-    if (options instanceof Function) {
-      cb = options;
-      opts = tokenOptions;
+    let opts = tokenOptions;
+    let secret = pluginOptions.secret;
+    if (!user || !user.userid || !user.username || !user.role) {
+      throw new Error('No valid user provided.');
     }
-    else {
-      cb = callback;
+
+    if (options) {
+      secret = secretOrPrivateKey;
       opts = Object.assign({}, tokenOptions, options);
     }
-
-    if (!user || !user.userid || !user.username || !user.role ||
-        pluginOptions.userRoles.indexOf(user.role) === -1) {
-      return cb(new Error('No valid user provided.'));
+    else if (secretOrPrivateKey) {
+      if (secretOrPrivateKey instanceof Object) {
+        opts = Object.assign({}, tokenOptions, secretOrPrivateKey);
+      }
+      else {
+        secret = secretOrPrivateKey;
+      }
     }
 
     const tokenData = {
@@ -35,9 +38,12 @@ const getToken = function (pluginOptions) {
       role: user.role
     };
 
-    Jwt.sign(tokenData, pluginOptions.secret, opts, cb);
-  };
+    if (opts.expiresIn === null) {
+      delete opts.expiresIn;
+    }
 
+    return Jwt.sign(tokenData, secret, opts);
+  };
 };
 
 module.exports = getToken;
