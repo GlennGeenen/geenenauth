@@ -1,6 +1,6 @@
 {
   "name": "geenenauth",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Node.js Hapi Authentication plugin",
   "main": "index.js",
   "scripts": {
