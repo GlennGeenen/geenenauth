@@ -23,7 +23,7 @@ const getValidationFunction = (options) => {
 
   return (decodedToken, request) => {
 
-    validate(decodedToken, options);
+    return validate(decodedToken, options);
   };
 };
 
