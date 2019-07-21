@@ -11,7 +11,7 @@ lab.experiment('getToken', () => {
   const getToken = require('../getToken')({
     secret: 'BestSecretEver',
     issuer: 'test',
-    audience: 'test'
+    audience: 'test',
   });
 
   lab.test('should get Token', async () => {

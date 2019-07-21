@@ -1,7 +1,7 @@
 'use strict';
 
 const Assert = require('assert');
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 const Lab = require('lab');
 
 const lab = exports.lab = Lab.script();
@@ -32,7 +32,7 @@ lab.experiment('Auth Plugin', () => {
     });
 
     await server.register({
-      register: require('../index'),
+      plugin: require('../index'),
       options: tokenOptions
     });
   });
@@ -119,7 +119,8 @@ lab.experiment('Auth Plugin', () => {
       };
 
       const response = await server.inject(options);
-      Assert(response.statusCode === 403);
+      console.log(response);
+      Assert.equal(response.statusCode, 403);
     });
   });
 
@@ -184,7 +185,8 @@ lab.experiment('Auth Plugin', () => {
       };
 
       const response = await server.inject(options);
-      Assert(response.statusCode === 403);
+      console.log(response);
+      Assert.equal(response.statusCode, 403);
     });
 
     lab.test('should be expired', async () => {
@@ -198,7 +200,7 @@ lab.experiment('Auth Plugin', () => {
       // We forward time to tomorrow
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const clock = Lolex.install(undefined, tomorrow);
+      const clock = Lolex.install({ now: tomorrow });
 
       const options = {
         method: 'GET',
@@ -228,7 +230,7 @@ lab.experiment('Auth Plugin', () => {
       // We forward time to tomorrow
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const clock = Lolex.install(undefined, tomorrow);
+      const clock = Lolex.install({ now: tomorrow });
 
       const options = {
         method: 'GET',
