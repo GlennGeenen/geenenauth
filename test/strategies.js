@@ -119,7 +119,7 @@ lab.experiment('Auth Plugin', () => {
       };
 
       const response = await server.inject(options);
-      console.log(response);
+      //Error 401: invalid credentials
       Assert.equal(response.statusCode, 403);
     });
   });
@@ -185,7 +185,7 @@ lab.experiment('Auth Plugin', () => {
       };
 
       const response = await server.inject(options);
-      console.log(response);
+      // Error 401: invalid credentials.
       Assert.equal(response.statusCode, 403);
     });
 
