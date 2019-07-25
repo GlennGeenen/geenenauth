@@ -119,8 +119,7 @@ lab.experiment('Auth Plugin', () => {
       };
 
       const response = await server.inject(options);
-      //Error 401: invalid credentials
-      Assert.equal(response.statusCode, 403);
+      Assert.equal(response.statusCode, 401);
     });
   });
 
@@ -168,7 +167,7 @@ lab.experiment('Auth Plugin', () => {
       Assert(response.statusCode === 401);
     });
 
-    lab.test('should return 403 for user', async () => {
+    lab.test('should return 401 for user', async () => {
 
       const token = await server.methods.getToken({
         userid: 'c0cb1883-e8c6-4efa-8561-4ad4f4c14518',
@@ -185,8 +184,7 @@ lab.experiment('Auth Plugin', () => {
       };
 
       const response = await server.inject(options);
-      // Error 401: invalid credentials.
-      Assert.equal(response.statusCode, 403);
+      Assert.equal(response.statusCode, 401);
     });
 
     lab.test('should be expired', async () => {
