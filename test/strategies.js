@@ -149,7 +149,7 @@ lab.experiment('Auth Plugin', () => {
         url: '/adminAuth'
       };
 
-      const response = await server.inject(options)
+      const response = await server.inject(options);
       Assert(response.statusCode === 401);
     });
 
@@ -163,7 +163,7 @@ lab.experiment('Auth Plugin', () => {
         }
       };
 
-      const response = await server.inject(options)
+      const response = await server.inject(options);
       Assert(response.statusCode === 401);
     });
 

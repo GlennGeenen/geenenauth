@@ -30,7 +30,8 @@ lab.experiment('Auth Plugin', () => {
             audience: 'test'
           }
         });
-      } catch (err) {
+      }
+      catch (err) {
         error = err;
       }
 
@@ -48,7 +49,8 @@ lab.experiment('Auth Plugin', () => {
             secret
           }
         });
-      } catch (err) {
+      }
+      catch (err) {
         error = err;
       }
 

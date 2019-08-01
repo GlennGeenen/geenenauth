@@ -46,7 +46,7 @@ const register = async (server, options) => {
         verifyOptions: tokenOptions
       });
     });
-  }  
+  }
 
   return null;
 };

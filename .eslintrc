@@ -3,7 +3,7 @@
     "node": true,
     "es6": true
   },
-  "extends": "hapi",
+  "extends": "@hapi/eslint-config-hapi",
   "rules": {
     "indent": [2, 2]
   }
