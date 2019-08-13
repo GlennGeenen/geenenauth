@@ -1,7 +1,7 @@
 'use strict';
 
 const Assert = require('assert');
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 const Lab = require('lab');
 
 const lab = exports.lab = Lab.script();
@@ -25,12 +25,13 @@ lab.experiment('Auth Plugin', () => {
       let error = null;
       try {
         await getServer().register({
-          register: require('../index'),
+          plugin: require('../index'),
           options: {
             audience: 'test'
           }
         });
-      } catch (err) {
+      }
+      catch (err) {
         error = err;
       }
 
@@ -43,12 +44,13 @@ lab.experiment('Auth Plugin', () => {
       let error = null;
       try {
         await getServer().register({
-          register: require('../index'),
+          plugin: require('../index'),
           options: {
             secret
           }
         });
-      } catch (err) {
+      }
+      catch (err) {
         error = err;
       }
 
@@ -59,7 +61,7 @@ lab.experiment('Auth Plugin', () => {
     lab.test('should register', async () => {
 
       await getServer().register({
-        register: require('../index'),
+        plugin: require('../index'),
         options: {
           secret,
           audience: 'test'
@@ -70,7 +72,7 @@ lab.experiment('Auth Plugin', () => {
     lab.test('should register', async () => {
 
       await getServer().register({
-        register: require('../index'),
+        plugin: require('../index'),
         options: {
           secret,
           issuer: 'test',
@@ -82,7 +84,7 @@ lab.experiment('Auth Plugin', () => {
     lab.test('should register', async () => {
 
       await getServer().register({
-        register: require('../index'),
+        plugin: require('../index'),
         options: {
           secret,
           issuer: 'test',
@@ -95,7 +97,7 @@ lab.experiment('Auth Plugin', () => {
     lab.test('should register', async () => {
 
       await getServer().register({
-        register: require('../index'),
+        plugin: require('../index'),
         options: {
           secret,
           issuer: 'test',

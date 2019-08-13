@@ -36,15 +36,17 @@ const register = async (server, options) => {
     audience: options.audience
   };
 
-  options.strategies.forEach((strat) => {
+  if (options.strategies) {
+    options.strategies.forEach((strat) => {
 
-    const strategyOptions = Object.assign({}, options, strat);
-    server.auth.strategy(strat.name, 'jwt', {
-      key: options.secret,
-      validate: Validator(strategyOptions),
-      verifyOptions: tokenOptions
+      const strategyOptions = Object.assign({}, options, strat);
+      server.auth.strategy(strat.name, 'jwt', {
+        key: options.secret,
+        validate: Validator(strategyOptions),
+        verifyOptions: tokenOptions
+      });
     });
-  });
+  }
 
   return null;
 };

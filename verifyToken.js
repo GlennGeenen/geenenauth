@@ -27,6 +27,7 @@ const verifyToken = (pluginOptions) => {
       else {
         secret = secretOrPrivateKey;
       }
+
       cb = options;
     }
     else {

@@ -41,9 +41,11 @@ lab.experiment('getToken', () => {
     let error = null;
     try {
       await getToken(null);
-    } catch (err) {
+    }
+    catch (err) {
       error = err;
     }
+
     Assert(error);
   });
 
@@ -55,9 +57,11 @@ lab.experiment('getToken', () => {
         username: 'test',
         role: 'test'
       });
-    } catch (err) {
+    }
+    catch (err) {
       error = err;
     }
+
     Assert(error);
   });
 
@@ -69,9 +73,11 @@ lab.experiment('getToken', () => {
         userid: 'test',
         role: 'test'
       });
-    } catch (err) {
+    }
+    catch (err) {
       error = err;
     }
+
     Assert(error);
   });
 
@@ -83,9 +89,11 @@ lab.experiment('getToken', () => {
         userid: 'test',
         username: 'test'
       });
-    } catch (err) {
+    }
+    catch (err) {
       error = err;
     }
+
     Assert(error);
   });
 

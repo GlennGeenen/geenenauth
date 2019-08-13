@@ -14,7 +14,7 @@ npm i geenenauth --save
 
 ```
 server.register({
-  register: require('geenenauth'),
+  plugin: require('geenenauth'),
   options: {
     secret: 'MyJWTSecret',
     issuer: 'MyIssuer', // Default GeenenTijd
